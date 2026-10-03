@@ -1,0 +1,725 @@
+{% extends "base.html" %}
+
+{% block title %}
+Batch Analysis | Ethereum Anomaly Detection
+{% endblock %}
+
+{% block breadcrumb %}
+Batch Analysis
+{% endblock %}
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+
+    <div class="page-header-content">
+
+        <div>
+
+            <span class="eyebrow">
+                BATCH TRANSACTION ANALYSIS
+            </span>
+
+            <h1>
+                Batch Analysis
+            </h1>
+
+            <p>
+                Upload a CSV file to analyze multiple Ethereum
+                transactions using a trained machine learning model.
+            </p>
+
+        </div>
+
+        <div class="page-header-badge">
+
+            <span class="status-dot"></span>
+
+            Batch Analysis Ready
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ERROR MESSAGE -->
+{% if error %}
+
+<div class="batch-alert batch-alert-error">
+
+    <div class="batch-alert-icon">
+        !
+    </div>
+
+    <div>
+
+        <strong>
+            Analysis Error
+        </strong>
+
+        <p>
+            {{ error }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- MAIN BATCH LAYOUT -->
+<div class="batch-layout">
+
+
+    <!-- ==============================
+         UPLOAD FORM
+    =============================== -->
+
+    <section class="batch-card">
+
+        <div class="batch-card-header">
+
+            <div>
+
+                <span class="card-eyebrow">
+                    INPUT DATA
+                </span>
+
+                <h2>
+                    Upload Transaction Data
+                </h2>
+
+                <p>
+                    Provide a CSV file containing the transaction
+                    features required by the detection model.
+                </p>
+
+            </div>
+
+            <div class="card-header-icon batch-header-icon">
+                CSV
+            </div>
+
+        </div>
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- MODEL -->
+
+            <div class="form-group">
+
+                <label for="model">
+                    Machine Learning Model
+                </label>
+
+                <select
+                    name="model"
+                    id="model"
+                    required
+                >
+
+                    <option
+                        value="random_forest"
+                        {% if model_name == "random_forest" %}
+                        selected
+                        {% endif %}
+                    >
+                        Random Forest
+                    </option>
+
+                    <option
+                        value="xgboost"
+                        {% if model_name == "xgboost" %}
+                        selected
+                        {% endif %}
+                    >
+                        XGBoost
+                    </option>
+
+                </select>
+
+                <span class="field-help">
+                    Select the trained model used to classify
+                    the uploaded transactions.
+                </span>
+
+            </div>
+
+
+            <!-- FILE UPLOAD -->
+
+            <div class="batch-upload-area">
+
+                <div class="batch-upload-icon">
+                    ↑
+                </div>
+
+                <span class="batch-upload-label">
+                    CSV DATASET
+                </span>
+
+                <h3>
+                    Upload Transaction CSV
+                </h3>
+
+                <p>
+                    Select a CSV file containing your
+                    Ethereum transaction data.
+                </p>
+
+
+                <label
+                    for="csv_file"
+                    class="batch-file-button"
+                >
+                    Choose CSV File
+                </label>
+
+
+                <input
+                    type="file"
+                    id="csv_file"
+                    name="csv_file"
+                    accept=".csv"
+                    required
+                    class="batch-file-input"
+                >
+
+
+                <span
+                    id="selected-file-name"
+                    class="selected-file-name"
+                >
+                    No file selected
+                </span>
+
+            </div>
+
+
+            <!-- REQUIRED COLUMNS -->
+
+            <div class="required-columns">
+
+                <div class="required-columns-header">
+
+                    <span>
+                        Required Columns
+                    </span>
+
+                    <span class="columns-count">
+                        5 features
+                    </span>
+
+                </div>
+
+
+                <div class="column-list">
+
+                    <span class="column-tag">
+                        From
+                    </span>
+
+                    <span class="column-tag">
+                        To
+                    </span>
+
+                    <span class="column-tag">
+                        Value
+                    </span>
+
+                    <span class="column-tag">
+                        BlockHeight
+                    </span>
+
+                    <span class="column-tag">
+                        Hour
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="batch-submit"
+            >
+
+                <span>
+                    Run Batch Analysis
+                </span>
+
+                <span class="batch-submit-arrow">
+                    →
+                </span>
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- ==============================
+         WORKFLOW INFORMATION
+    =============================== -->
+
+    <section class="batch-card batch-info-card">
+
+        <div class="batch-card-header">
+
+            <div>
+
+                <span class="card-eyebrow">
+                    ANALYSIS WORKFLOW
+                </span>
+
+                <h2>
+                    How It Works
+                </h2>
+
+                <p>
+                    The uploaded transaction data is processed
+                    through the selected machine learning model.
+                </p>
+
+            </div>
+
+            <div class="card-header-icon">
+                AI
+            </div>
+
+        </div>
+
+
+        <div class="workflow-list">
+
+
+            <!-- STEP 1 -->
+
+            <div class="workflow-item">
+
+                <div class="workflow-number">
+                    01
+                </div>
+
+                <div>
+
+                    <h3>
+                        Upload Dataset
+                    </h3>
+
+                    <p>
+                        Upload a CSV file containing Ethereum
+                        transaction data.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="workflow-item">
+
+                <div class="workflow-number">
+                    02
+                </div>
+
+                <div>
+
+                    <h3>
+                        Feature Processing
+                    </h3>
+
+                    <p>
+                        The transaction features are processed
+                        according to the trained detection model.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="workflow-item">
+
+                <div class="workflow-number">
+                    03
+                </div>
+
+                <div>
+
+                    <h3>
+                        Model Prediction
+                    </h3>
+
+                    <p>
+                        The selected Random Forest or XGBoost
+                        model classifies each transaction.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 4 -->
+
+            <div class="workflow-item">
+
+                <div class="workflow-number">
+                    04
+                </div>
+
+                <div>
+
+                    <h3>
+                        Results
+                    </h3>
+
+                    <p>
+                        The system displays the number of normal
+                        and anomaly-indicating transactions.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="batch-note">
+
+            <div class="note-icon">
+                i
+            </div>
+
+            <div>
+
+                <strong>
+                    Required Dataset Format
+                </strong>
+
+                <p>
+                    Make sure your CSV contains the required
+                    columns: From, To, Value, BlockHeight, and Hour.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+
+<!-- ==============================
+     RESULTS
+================================ -->
+
+{% if summary %}
+
+<section class="batch-results-section">
+
+
+    <!-- RESULTS HEADER -->
+
+    <div class="section-header">
+
+        <div>
+
+            <span class="card-eyebrow">
+                ANALYSIS RESULTS
+            </span>
+
+            <h2>
+                Batch Detection Results
+            </h2>
+
+            <p>
+                Summary of the transactions analyzed by
+                the selected machine learning model.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="batch-summary-grid">
+
+
+        <!-- TOTAL -->
+
+        <div class="batch-summary-card">
+
+            <div class="batch-summary-icon">
+                TX
+            </div>
+
+            <div>
+
+                <span>
+                    Total Transactions
+                </span>
+
+                <strong>
+                    {{ summary.total }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ANOMALY -->
+
+        <div class="batch-summary-card batch-summary-anomaly">
+
+            <div class="batch-summary-icon">
+                !
+            </div>
+
+            <div>
+
+                <span>
+                    Anomaly-Indicating
+                </span>
+
+                <strong>
+                    {{ summary.anomaly }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- NORMAL -->
+
+        <div class="batch-summary-card">
+
+            <div class="batch-summary-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Normal
+                </span>
+
+                <strong>
+                    {{ summary.normal }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- RATE -->
+
+        <div class="batch-summary-card">
+
+            <div class="batch-summary-icon">
+                %
+            </div>
+
+            <div>
+
+                <span>
+                    Anomaly Rate
+                </span>
+
+                <strong>
+                    {{ summary.anomaly_rate|floatformat:2 }}%
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RESULT OVERVIEW -->
+
+    <div class="batch-result-overview">
+
+
+        <div>
+
+            <span class="card-eyebrow">
+                DETECTION DISTRIBUTION
+            </span>
+
+            <h2>
+                Transaction Classification
+            </h2>
+
+            <p>
+                Distribution of normal and anomaly-indicating
+                transactions detected in the uploaded dataset.
+            </p>
+
+        </div>
+
+
+        <div
+            class="batch-donut"
+            style="--anomaly-rate: {{ summary.anomaly_rate }};"
+        >
+
+            <div class="batch-donut-center">
+
+                <strong>
+                    {{ summary.anomaly_rate|floatformat:2 }}%
+                </strong>
+
+                <span>
+                    anomaly
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="overview-legend">
+
+
+            <div class="legend-item">
+
+                <div class="legend-left">
+
+                    <span class="legend-dot normal-dot"></span>
+
+                    <span>
+                        Normal
+                    </span>
+
+                </div>
+
+                <strong>
+                    {{ summary.normal }}
+                </strong>
+
+            </div>
+
+
+            <div class="legend-item">
+
+                <div class="legend-left">
+
+                    <span class="legend-dot anomaly-dot"></span>
+
+                    <span>
+                        Anomaly
+                    </span>
+
+                </div>
+
+                <strong>
+                    {{ summary.anomaly }}
+                </strong>
+
+            </div>
+
+
+            <div class="legend-divider"></div>
+
+
+            <div class="legend-item total-item">
+
+                <span>
+                    Model
+                </span>
+
+                <strong>
+
+                    {% if model_name == "random_forest" %}
+
+                        Random Forest
+
+                    {% elif model_name == "xgboost" %}
+
+                        XGBoost
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+{% endif %}
+
+
+
+<!-- FILE NAME SCRIPT -->
+
+<script>
+
+    const fileInput = document.getElementById("csv_file");
+
+    const fileName = document.getElementById("selected-file-name");
+
+
+    if (fileInput && fileName) {
+
+        fileInput.addEventListener("change", function () {
+
+            if (this.files && this.files.length > 0) {
+
+                fileName.textContent = this.files[0].name;
+
+            } else {
+
+                fileName.textContent = "No file selected";
+
+            }
+
+        });
+
+    }
+
+</script>
+
+
+{% endblock %}

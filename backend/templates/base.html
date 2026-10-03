@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Ethereum Anomaly Detection{% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+
+        <div class="sidebar-top">
+
+            <!-- Brand -->
+            <div class="brand">
+
+                <div class="brand-mark">
+                    EA
+                </div>
+
+                <div class="brand-text">
+                    <h2>ETH Anomaly</h2>
+                    <span>Detection System</span>
+                </div>
+
+            </div>
+
+
+            <!-- Navigation -->
+            <nav class="nav-menu">
+
+                <div class="nav-section-label">
+                    MAIN
+                </div>
+
+                <a
+                    href="{% url 'dashboard' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a
+                    href="{% url 'prediction' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'prediction' %}active{% endif %}"
+                >
+                    <span class="nav-icon">◈</span>
+                    <span>Prediction</span>
+                </a>
+
+
+                <a
+                    href="{% url 'batch_analysis' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'batch_analysis' %}active{% endif %}"
+                >
+                    <span class="nav-icon">▣</span>
+                    <span>Batch Analysis</span>
+                </a>
+
+
+                <div class="nav-section-label model-label">
+                    MODEL
+                </div>
+
+
+                <a
+                    href="{% url 'model_information' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'model_information' %}active{% endif %}"
+                >
+                    <span class="nav-icon">◇</span>
+                    <span>Model Information</span>
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <!-- Sidebar Bottom -->
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Ready</strong>
+                    <span>ML service active</span>
+                </div>
+
+            </div>
+
+            <div class="sidebar-footer">
+                Ethereum Anomaly Detection
+                <span>v1.0</span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN AREA
+    ========================== -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+
+            <div class="topbar-breadcrumb">
+                <span>Ethereum</span>
+                <span class="breadcrumb-separator">/</span>
+
+                <span class="breadcrumb-current">
+                    {% block breadcrumb %}Dashboard{% endblock %}
+                </span>
+            </div>
+
+
+            <div class="topbar-status">
+
+                <span class="status-dot"></span>
+
+                <span>System Operational</span>
+
+            </div>
+
+        </header>
+
+
+        <!-- Page Content -->
+        <div class="page-content">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

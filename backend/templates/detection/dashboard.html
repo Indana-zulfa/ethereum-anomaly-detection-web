@@ -1,0 +1,622 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | Ethereum Anomaly Detection
+{% endblock %}
+
+{% block breadcrumb %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================
+     PAGE HEADER
+========================== -->
+
+<div class="page-header">
+
+    <div class="page-header-content">
+
+        <div>
+            <span class="eyebrow">
+                ETHEREUM TRANSACTION ANALYSIS
+            </span>
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                Monitor and analyze Ethereum transaction anomalies
+                using machine learning.
+            </p>
+        </div>
+
+
+        <div class="page-header-badge">
+
+            <span class="status-dot"></span>
+
+            Detection System Active
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     STATISTICS
+========================== -->
+
+<section class="stats-grid">
+
+
+    <!-- Total -->
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <span class="stat-label">
+                Total Transactions
+            </span>
+
+            <div class="stat-icon">
+                TX
+            </div>
+
+        </div>
+
+
+        <div class="stat-value">
+            {{ total_transactions }}
+        </div>
+
+
+        <div class="stat-footer">
+
+            <span class="stat-indicator neutral"></span>
+
+            <span>
+                Evaluation test data
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Anomaly -->
+    <div class="stat-card anomaly-card">
+
+        <div class="stat-card-top">
+
+            <span class="stat-label">
+                Anomalies
+            </span>
+
+            <div class="stat-icon anomaly-icon">
+                !
+            </div>
+
+        </div>
+
+
+        <div class="stat-value">
+            {{ anomalies }}
+        </div>
+
+
+        <div class="stat-footer">
+
+            <span class="stat-indicator danger"></span>
+
+            <span>
+                Classified as anomaly
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Normal -->
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <span class="stat-label">
+                Normal Transactions
+            </span>
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+        </div>
+
+
+        <div class="stat-value">
+            {{ normal_transactions }}
+        </div>
+
+
+        <div class="stat-footer">
+
+            <span class="stat-indicator success"></span>
+
+            <span>
+                Classified as normal
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Rate -->
+    <div class="stat-card">
+
+        <div class="stat-card-top">
+
+            <span class="stat-label">
+                Anomaly Rate
+            </span>
+
+            <div class="stat-icon">
+                %
+            </div>
+
+        </div>
+
+
+        <div class="stat-value">
+            {{ anomaly_rate }}
+        </div>
+
+
+        <div class="stat-footer">
+
+            <span class="stat-indicator warning"></span>
+
+            <span>
+                Anomaly proportion
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     OVERVIEW
+========================== -->
+
+<section class="dashboard-grid">
+
+
+    <!-- Detection Overview -->
+
+    <div class="dashboard-card overview-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-eyebrow">
+                    DATASET OVERVIEW
+                </span>
+
+                <h2>
+                    Detection Overview
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="overview-content">
+
+
+            <div class="overview-chart">
+
+                <div class="donut-chart">
+
+                    <div class="donut-center">
+
+                        <strong>
+                            {{ anomaly_rate }}
+                        </strong>
+
+                        <span>
+                            anomaly
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-legend">
+
+
+                <div class="legend-item">
+
+                    <div class="legend-left">
+
+                        <span class="legend-dot normal-dot"></span>
+
+                        <span>
+                            Normal
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        {{ normal_transactions }}
+                    </strong>
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <div class="legend-left">
+
+                        <span class="legend-dot anomaly-dot"></span>
+
+                        <span>
+                            Anomaly
+                        </span>
+
+                    </div>
+
+                    <strong>
+                        {{ anomalies }}
+                    </strong>
+
+                </div>
+
+
+                <div class="legend-divider"></div>
+
+
+                <div class="legend-item total-item">
+
+                    <span>
+                        Total transactions
+                    </span>
+
+                    <strong>
+                        {{ total_transactions }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Models -->
+
+    <div class="dashboard-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-eyebrow">
+                    MACHINE LEARNING
+                </span>
+
+                <h2>
+                    Detection Models
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="model-list">
+
+
+            <!-- Random Forest -->
+
+            <div class="model-item">
+
+                <div class="model-logo rf-logo">
+                    RF
+                </div>
+
+                <div class="model-info">
+
+                    <h3>
+                        Random Forest
+                    </h3>
+
+                    <p>
+                        Ensemble classification
+                    </p>
+
+                </div>
+
+                <span class="model-status">
+                    Active
+                </span>
+
+            </div>
+
+
+            <!-- XGBoost -->
+
+            <div class="model-item">
+
+                <div class="model-logo xgb-logo">
+                    XGB
+                </div>
+
+                <div class="model-info">
+
+                    <h3>
+                        XGBoost
+                    </h3>
+
+                    <p>
+                        Gradient boosting
+                    </p>
+
+                </div>
+
+                <span class="model-status">
+                    Active
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEATURES
+========================== -->
+
+<section class="dashboard-section">
+
+
+    <div class="section-header">
+
+        <div>
+
+            <span class="card-eyebrow">
+                INPUT DATA
+            </span>
+
+            <h2>
+                Transaction Features
+            </h2>
+
+            <p>
+                Features used by the machine learning detection models.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                01
+            </div>
+
+            <h3>
+                From Address
+            </h3>
+
+            <p>
+                Encoded Ethereum wallet address initiating the transaction.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                02
+            </div>
+
+            <h3>
+                To Address
+            </h3>
+
+            <p>
+                Encoded Ethereum wallet address receiving the transaction.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                03
+            </div>
+
+            <h3>
+                Transaction Value
+            </h3>
+
+            <p>
+                Value transferred through the Ethereum transaction.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                04
+            </div>
+
+            <h3>
+                Block Height
+            </h3>
+
+            <p>
+                Blockchain block position associated with the transaction.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-number">
+                05
+            </div>
+
+            <h3>
+                Hour
+            </h3>
+
+            <p>
+                Hour of transaction execution extracted from the timestamp.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     QUICK ACTIONS
+========================== -->
+
+<section class="dashboard-section">
+
+
+    <div class="section-header">
+
+        <div>
+
+            <span class="card-eyebrow">
+                GET STARTED
+            </span>
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <p>
+                Choose how you want to analyze Ethereum transactions.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="action-grid">
+
+
+        <!-- Prediction -->
+
+        <a
+            href="{% url 'prediction' %}"
+            class="action-card"
+        >
+
+            <div class="action-icon">
+                →
+            </div>
+
+            <div class="action-content">
+
+                <span class="action-label">
+                    SINGLE TRANSACTION
+                </span>
+
+                <h3>
+                    Single Prediction
+                </h3>
+
+                <p>
+                    Analyze one Ethereum transaction
+                    using the detection model.
+                </p>
+
+            </div>
+
+            <span class="action-arrow">
+                →
+            </span>
+
+        </a>
+
+
+        <!-- Batch -->
+
+        <a
+            href="{% url 'batch_analysis' %}"
+            class="action-card"
+        >
+
+            <div class="action-icon batch-action-icon">
+                ⇥
+            </div>
+
+            <div class="action-content">
+
+                <span class="action-label">
+                    MULTIPLE TRANSACTIONS
+                </span>
+
+                <h3>
+                    Batch Analysis
+                </h3>
+
+                <p>
+                    Upload a CSV file and analyze
+                    multiple transactions at once.
+                </p>
+
+            </div>
+
+            <span class="action-arrow">
+                →
+            </span>
+
+        </a>
+
+
+    </div>
+
+</section>
+
+
+{% endblock %}

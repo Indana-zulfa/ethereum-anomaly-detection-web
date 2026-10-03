@@ -1,0 +1,107 @@
+import joblib
+import pandas as pd
+from pathlib import Path
+
+
+# =========================
+# MODEL PATH
+# =========================
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_DIR = BASE_DIR / "models"
+
+
+# =========================
+# LOAD MODEL
+# =========================
+
+RF_MODEL_PATH = MODEL_DIR / "random_forest.pkl"
+XGB_MODEL_PATH = MODEL_DIR / "xgboost.pkl"
+ENCODER_PATH = MODEL_DIR / "encoder.pkl"
+
+
+rf_model = joblib.load(RF_MODEL_PATH)
+xgb_model = joblib.load(XGB_MODEL_PATH)
+encoder = joblib.load(ENCODER_PATH)
+
+
+# =========================
+# PREDICTION FUNCTION
+# =========================
+
+def predict_transaction(
+    from_address,
+    to_address,
+    value,
+    block_height,
+    hour,
+    model_name
+):
+    """
+    Predict a single Ethereum transaction.
+    """
+
+    # Encode wallet addresses
+    address_data = pd.DataFrame({
+        "From": [from_address],
+        "To": [to_address],
+    })
+
+    encoded_addresses = encoder.transform(address_data)
+
+    from_encoded = encoded_addresses[0][0]
+    to_encoded = encoded_addresses[0][1]
+
+    # Select model and features
+    if model_name == "random_forest":
+
+        model = rf_model
+
+        input_data = pd.DataFrame([
+            {
+                "From_encoded": from_encoded,
+                "To_encoded": to_encoded,
+                "Value": float(value),
+                "BlockHeight": int(block_height),
+            }
+        ])
+
+    elif model_name == "xgboost":
+
+        model = xgb_model
+
+        input_data = pd.DataFrame([
+            {
+                "From_encoded": from_encoded,
+                "To_encoded": to_encoded,
+                "Value": float(value),
+                "BlockHeight": int(block_height),
+                "Hour": int(hour),
+            }
+        ])
+
+    else:
+        raise ValueError("Model tidak dikenali.")
+
+    # Prediction
+    prediction = model.predict(input_data)[0]
+
+    # Probability
+    probability = None
+
+    if hasattr(model, "predict_proba"):
+        probabilities = model.predict_proba(input_data)[0]
+        probability = float(max(probabilities))
+
+    # Convert prediction to label
+    if int(prediction) == 1:
+        label = "Anomaly-indicating"
+    else:
+        label = "Normal"
+
+    return {
+        "prediction": int(prediction),
+        "label": label,
+        "model": model_name,
+        "probability": probability,
+    }

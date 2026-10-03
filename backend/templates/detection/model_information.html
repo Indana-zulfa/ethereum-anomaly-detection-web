@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+
+{% block title %}Model Information | Ethereum Anomaly Detection{% endblock %}
+
+{% block breadcrumb %}Model Information{% endblock %}
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div>
+        <p class="page-label">MACHINE LEARNING MODELS</p>
+
+        <h1>Model Information</h1>
+
+        <p class="page-description">
+            Overview of the machine learning models, input features,
+            feature scenarios, and evaluation metrics used for
+            Ethereum transaction anomaly detection.
+        </p>
+    </div>
+</div>
+
+
+<!-- MODEL OVERVIEW -->
+<div class="model-info-grid">
+
+    <!-- RANDOM FOREST -->
+    <div class="dashboard-section">
+
+        <div class="model-info-header">
+
+            <div class="large-model-icon">
+                RF
+            </div>
+
+            <div>
+                <h2>Random Forest</h2>
+                <p>Ensemble Learning</p>
+            </div>
+
+        </div>
+
+        <p class="model-description">
+            Random Forest is an ensemble learning algorithm that combines
+            multiple decision trees to perform classification. In this
+            system, it is used to classify Ethereum transactions into
+            normal and anomaly-indicating transactions.
+        </p>
+
+        <div class="model-detail-grid">
+
+            <div class="model-detail">
+                <span>Model Type</span>
+                <strong>Classification</strong>
+            </div>
+
+            <div class="model-detail">
+                <span>Number of Trees</span>
+                <strong>50</strong>
+            </div>
+
+            <div class="model-detail">
+                <span>Random State</span>
+                <strong>42</strong>
+            </div>
+
+            <div class="model-detail">
+                <span>Primary Role</span>
+                <strong>Anomaly Detection</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- XGBOOST -->
+    <div class="dashboard-section">
+
+        <div class="model-info-header">
+
+            <div class="large-model-icon">
+                XGB
+            </div>
+
+            <div>
+                <h2>XGBoost</h2>
+                <p>Gradient Boosting</p>
+            </div>
+
+        </div>
+
+        <p class="model-description">
+            XGBoost is a gradient boosting algorithm that builds an
+            ensemble of decision trees sequentially. It is used as an
+            alternative classification model for Ethereum transaction
+            anomaly detection.
+        </p>
+
+        <div class="model-detail-grid">
+
+            <div class="model-detail">
+                <span>Model Type</span>
+                <strong>Classification</strong>
+            </div>
+
+            <div class="model-detail">
+                <span>Number of Estimators</span>
+                <strong>100</strong>
+            </div>
+
+            <div class="model-detail">
+                <span>Max Depth</span>
+                <strong>6</strong>
+            </div>
+
+            <div class="model-detail">
+                <span>Learning Rate</span>
+                <strong>0.1</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- INPUT FEATURES -->
+<div class="dashboard-section">
+
+    <div class="section-header">
+
+        <h2>Input Features</h2>
+
+        <p>
+            Features used to represent the characteristics of
+            Ethereum transactions during model prediction.
+        </p>
+
+    </div>
+
+
+    <div class="model-feature-grid">
+
+        <!-- FEATURE 01 -->
+        <div class="model-feature-card">
+
+            <div class="feature-number">
+                01
+            </div>
+
+            <h3>From Address</h3>
+
+            <p>
+                Encoded wallet address that initiates the
+                Ethereum transaction.
+            </p>
+
+        </div>
+
+
+        <!-- FEATURE 02 -->
+        <div class="model-feature-card">
+
+            <div class="feature-number">
+                02
+            </div>
+
+            <h3>To Address</h3>
+
+            <p>
+                Encoded wallet address that receives the
+                Ethereum transaction.
+            </p>
+
+        </div>
+
+
+        <!-- FEATURE 03 -->
+        <div class="model-feature-card">
+
+            <div class="feature-number">
+                03
+            </div>
+
+            <h3>Transaction Value</h3>
+
+            <p>
+                The value transferred through the Ethereum
+                transaction.
+            </p>
+
+        </div>
+
+
+        <!-- FEATURE 04 -->
+        <div class="model-feature-card">
+
+            <div class="feature-number">
+                04
+            </div>
+
+            <h3>Block Height</h3>
+
+            <p>
+                Blockchain block position associated with
+                the transaction.
+            </p>
+
+        </div>
+
+
+        <!-- FEATURE 05 -->
+        <div class="model-feature-card">
+
+            <div class="feature-number">
+                05
+            </div>
+
+            <h3>Hour</h3>
+
+            <p>
+                The transaction execution hour extracted
+                from the timestamp.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FEATURE SCENARIOS -->
+<div class="dashboard-section">
+
+    <div class="section-header">
+
+        <h2>Feature Scenarios</h2>
+
+        <p>
+            Different feature configurations used to analyze the
+            contribution of transaction characteristics.
+        </p>
+
+    </div>
+
+
+    <div class="scenario-table">
+
+        <!-- HEADER -->
+        <div class="scenario-row scenario-header">
+
+            <div>
+                Scenario
+            </div>
+
+            <div>
+                Features
+            </div>
+
+        </div>
+
+
+        <!-- BASELINE -->
+        <div class="scenario-row">
+
+            <div>
+                <strong>Baseline</strong>
+            </div>
+
+            <div>
+                From Address, To Address, Value
+            </div>
+
+        </div>
+
+
+        <!-- FULL FEATURES -->
+        <div class="scenario-row">
+
+            <div>
+                <strong>Full Features</strong>
+            </div>
+
+            <div>
+                From Address, To Address, Value,
+                Block Height, Hour
+            </div>
+
+        </div>
+
+
+        <!-- WITHOUT ADDRESS -->
+        <div class="scenario-row">
+
+            <div>
+                <strong>Without Address</strong>
+            </div>
+
+            <div>
+                Value, Block Height, Hour
+            </div>
+
+        </div>
+
+
+        <!-- WITHOUT HOUR -->
+        <div class="scenario-row">
+
+            <div>
+                <strong>Without Hour</strong>
+            </div>
+
+            <div>
+                From Address, To Address, Value, Block Height
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- EVALUATION METRICS -->
+<div class="dashboard-section">
+
+    <div class="section-header">
+
+        <h2>Evaluation Metrics</h2>
+
+        <p>
+            Metrics used to evaluate classification performance
+            on the Ethereum transaction dataset.
+        </p>
+
+    </div>
+
+
+    <div class="metric-grid">
+
+        <!-- PRECISION -->
+        <div class="metric-card">
+
+            <h3>Precision</h3>
+
+            <p>
+                Measures the proportion of transactions predicted
+                as anomalies that are actually anomaly-indicating.
+            </p>
+
+        </div>
+
+
+        <!-- RECALL -->
+        <div class="metric-card">
+
+            <h3>Recall</h3>
+
+            <p>
+                Measures the proportion of actual anomaly-indicating
+                transactions successfully detected by the model.
+            </p>
+
+        </div>
+
+
+        <!-- F1 -->
+        <div class="metric-card">
+
+            <h3>F1 Score</h3>
+
+            <p>
+                Harmonic mean of precision and recall, providing
+                a balance between the two measures.
+            </p>
+
+        </div>
+
+
+        <!-- PR-AUC -->
+        <div class="metric-card">
+
+            <h3>PR-AUC</h3>
+
+            <p>
+                Measures classification performance across different
+                precision-recall thresholds.
+            </p>
+
+        </div>
+
+
+        <!-- MCC -->
+        <div class="metric-card">
+
+            <h3>MCC</h3>
+
+            <p>
+                Measures binary classification quality using all
+                four components of the confusion matrix.
+            </p>
+
+        </div>
+
+
+        <!-- SPECIFICITY -->
+        <div class="metric-card">
+
+            <h3>Specificity</h3>
+
+            <p>
+                Measures the proportion of normal transactions
+                correctly classified as normal.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

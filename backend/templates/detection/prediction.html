@@ -1,0 +1,272 @@
+{% extends "base.html" %} {% block title %} Prediction | Ethereum Anomaly Detection {% endblock %} {% block breadcrumb %} Prediction {% endblock %} {% block content %}
+
+<!-- =========================================================
+     PAGE HEADER
+========================================================= -->
+
+<div class="page-header">
+  <div class="page-header-content">
+    <div>
+      <span class="eyebrow"> TRANSACTION ANALYSIS </span>
+
+      <h1>Transaction Prediction</h1>
+
+      <p>Analyze an Ethereum transaction using a trained machine learning model.</p>
+    </div>
+
+    <div class="page-header-badge">
+      <span class="status-dot"></span>
+      ML Prediction Ready
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     PREDICTION LAYOUT
+========================================================= -->
+
+<div class="prediction-layout">
+  <!-- =====================================================
+         LEFT — TRANSACTION FORM
+    ====================================================== -->
+
+  <section class="prediction-card prediction-form-card">
+    <div class="prediction-card-header">
+      <div>
+        <span class="card-eyebrow"> TRANSACTION INPUT </span>
+
+        <h2>Transaction Information</h2>
+
+        <p>Enter the transaction features required by the detection model.</p>
+      </div>
+
+      <div class="card-header-icon">TX</div>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <!-- MODEL -->
+
+      <div class="form-group">
+        <label for="model"> Machine Learning Model </label>
+
+        <div class="input-wrapper">
+          <select name="model" id="model" required>
+            <option value="random_forest">Random Forest</option>
+
+            <option value="xgboost">XGBoost</option>
+          </select>
+        </div>
+
+        <span class="field-help"> Select the trained model used for prediction. </span>
+      </div>
+
+      <!-- FROM ADDRESS -->
+
+      <div class="form-group">
+        <label for="from_address"> From Address </label>
+
+        <input type="text" id="from_address" name="from_address" placeholder="Enter sender Ethereum address" required />
+
+        <span class="field-help"> Wallet address initiating the transaction. </span>
+      </div>
+
+      <!-- TO ADDRESS -->
+
+      <div class="form-group">
+        <label for="to_address"> To Address </label>
+
+        <input type="text" id="to_address" name="to_address" placeholder="Enter receiver Ethereum address" required />
+
+        <span class="field-help"> Wallet address receiving the transaction. </span>
+      </div>
+
+      <!-- VALUE -->
+
+      <div class="form-group">
+        <label for="value"> Transaction Value </label>
+
+        <input type="number" id="value" name="value" step="any" placeholder="e.g. 1.5" required />
+
+        <span class="field-help"> Value transferred in the transaction. </span>
+      </div>
+
+      <!-- BLOCK HEIGHT + HOUR -->
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="block_height"> Block Height </label>
+
+          <input type="number" id="block_height" name="block_height" placeholder="e.g. 7000000" required />
+
+          <span class="field-help"> Ethereum blockchain block number. </span>
+        </div>
+
+        <div class="form-group">
+          <label for="hour"> Hour </label>
+
+          <input type="number" id="hour" name="hour" min="0" max="23" placeholder="0 - 23" required />
+
+          <span class="field-help"> Transaction hour, 0–23. </span>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+
+      <button type="submit" class="prediction-submit">
+        <span> Run Prediction </span>
+
+        <span class="submit-arrow"> → </span>
+      </button>
+    </form>
+  </section>
+
+  <!-- =====================================================
+         RIGHT — RESULT
+    ====================================================== -->
+
+  <section class="prediction-card prediction-result-card">
+    <div class="prediction-card-header">
+      <div>
+        <span class="card-eyebrow"> MODEL OUTPUT </span>
+
+        <h2>Prediction Result</h2>
+
+        <p>Machine learning prediction output.</p>
+      </div>
+
+      <div class="card-header-icon result-icon">AI</div>
+    </div>
+
+    {% if result %}
+
+    <!-- =============================================
+                 ANOMALY RESULT
+            ============================================== -->
+
+    {% if result.prediction == 1 %}
+
+    <div class="prediction-status anomaly">
+      <div class="status-icon">!</div>
+
+      <div class="status-content">
+        <span class="status-caption"> PREDICTION RESULT </span>
+
+        <h3>ANOMALY-INDICATING</h3>
+
+        <p>The model identifies this transaction as anomaly-indicating.</p>
+      </div>
+    </div>
+
+    {% else %}
+
+    <!-- =============================================
+                 NORMAL RESULT
+            ============================================== -->
+
+    <div class="prediction-status normal">
+      <div class="status-icon">✓</div>
+
+      <div class="status-content">
+        <span class="status-caption"> PREDICTION RESULT </span>
+
+        <h3>NORMAL TRANSACTION</h3>
+
+        <p>The model identifies this transaction as normal.</p>
+      </div>
+    </div>
+
+    {% endif %}
+
+    <!-- =============================================
+                 CONFIDENCE
+            ============================================== -->
+
+    {% if result.probability is not None %}
+
+    <div class="confidence-section">
+      <div class="confidence-header">
+        <div>
+          <span class="confidence-label"> Prediction Confidence </span>
+
+          <small> Model probability </small>
+        </div>
+
+        <strong> {% widthratio result.probability 1 100 %}% </strong>
+      </div>
+
+      <div class="confidence-bar">
+        <div class="confidence-fill" style="width: {% widthratio result.probability 1 100 %}%;"></div>
+      </div>
+    </div>
+
+    {% endif %}
+
+    <!-- =============================================
+                 PREDICTION DETAILS
+            ============================================== -->
+
+    <div class="prediction-details">
+      <div class="prediction-detail">
+        <span> Model </span>
+
+        <strong> {% if result.model == "random_forest" %} Random Forest {% else %} XGBoost {% endif %} </strong>
+      </div>
+
+      <div class="prediction-detail">
+        <span> Prediction Class </span>
+
+        <strong> {{ result.prediction }} </strong>
+      </div>
+
+      <div class="prediction-detail">
+        <span> Classification </span>
+
+        <strong> {{ result.label }} </strong>
+      </div>
+    </div>
+
+    <!-- =============================================
+                 INTERPRETATION
+            ============================================== -->
+
+    <div class="prediction-note">
+      <div class="note-icon">i</div>
+
+      <div>
+        <strong> Interpretation </strong>
+
+        {% if result.prediction == 1 %}
+
+        <p>This result indicates that the transaction matches patterns associated with the anomaly-indicating class in the trained model.</p>
+
+        {% else %}
+
+        <p>This result indicates that the transaction matches patterns associated with the normal class in the trained model.</p>
+
+        {% endif %}
+      </div>
+    </div>
+
+    {% else %}
+
+    <!-- =============================================
+                 EMPTY RESULT
+            ============================================== -->
+
+    <div class="empty-result">
+      <div class="empty-result-icon">?</div>
+
+      <span class="empty-result-label"> WAITING FOR INPUT </span>
+
+      <h3>No prediction yet</h3>
+
+      <p>Enter the transaction information on the left and run the prediction to see the machine learning result.</p>
+    </div>
+
+    {% endif %}
+  </section>
+</div>
+
+{% endblock %}
