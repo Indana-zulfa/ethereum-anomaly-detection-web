@@ -2,6 +2,7 @@ import joblib
 import pandas as pd
 from pathlib import Path
 from xgboost import XGBClassifier
+import zipfile
 
 
 # ==========================================
@@ -15,10 +16,22 @@ RF_MODEL_PATH = MODEL_DIR / "random_forest.pkl"
 XGB_MODEL_PATH = MODEL_DIR / "xgboost.json"
 ENCODER_PATH = MODEL_DIR / "encoder.pkl"
 
+RF_ZIP_PATH = MODEL_DIR / "random_forest.zip"
+ENCODER_ZIP_PATH = MODEL_DIR / "encoder.zip"
+
 
 # ==========================================
 # LOAD MODEL
 # ==========================================
+
+if not RF_MODEL_PATH.exists():
+    with zipfile.ZipFile(RF_ZIP_PATH, "r") as zip_ref:
+        zip_ref.extractall(MODEL_DIR)
+
+if not ENCODER_PATH.exists():
+    with zipfile.ZipFile(ENCODER_ZIP_PATH, "r") as zip_ref:
+        zip_ref.extractall(MODEL_DIR)
+
 
 rf_model = joblib.load(RF_MODEL_PATH)
 
@@ -149,6 +162,7 @@ def predict_batch(df, model_name):
     Melakukan prediction terhadap banyak transaksi
     yang berasal dari sebuah DataFrame.
     """
+
 
     # ------------------------------------------
     # Validasi model
